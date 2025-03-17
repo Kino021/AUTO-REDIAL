@@ -1,45 +1,29 @@
-import pyautogui
 import time
-import schedule
-import threading
 
-# Function to simulate actions
+# Function to simulate a task (e.g., print a message)
 def perform_task():
-    # Example: Simulating a keyboard press (e.g., typing text)
-    pyautogui.write('Hello, world!')
-    pyautogui.press('enter')
+    print("Task is running...")
 
-# Schedule the task to run every 10 seconds
-def job():
-    print("Performing task...")
-    perform_task()
-
-# Function to run scheduled tasks
-def run_schedule():
-    schedule.every(10).seconds.do(job)  # Change the time as needed
+# Simple scheduler function using time.sleep() for intervals
+def schedule_task(interval_seconds):
     while True:
-        schedule.run_pending()
-        time.sleep(1)
+        print(f"Waiting for {interval_seconds} seconds before performing the task...")
+        time.sleep(interval_seconds)  # Wait for the interval time
+        perform_task()  # Perform the task after the wait time
 
-# Run the scheduling in a separate thread
-schedule_thread = threading.Thread(target=run_schedule)
-schedule_thread.start()
+# Main function to simulate user input trigger for task scheduling
+def main():
+    print("Simple Task Automation")
+    try:
+        # Ask user for the interval time in seconds
+        interval = int(input("Enter the interval in seconds to repeat the task: "))
+        print(f"Automation will start now, repeating every {interval} seconds.")
+        
+        # Start scheduling the task with the given interval
+        schedule_task(interval)
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
 
-# Streamlit interface
-import streamlit as st
-
-st.title("PC Automation Tool")
-
-# Allow user to start/stop automation
-start_button = st.button('Start Automation')
-if start_button:
-    st.write("Automation started.")
-    # Here you can add more logic to start/stop the automation process
-    schedule_thread = threading.Thread(target=run_schedule)
-    schedule_thread.start()
-
-stop_button = st.button('Stop Automation')
-if stop_button:
-    st.write("Automation stopped.")
-    # Here you can implement logic to stop the automation
-    # You can kill the thread or use other methods to stop the task
+# Run the main function
+if __name__ == "__main__":
+    main()
